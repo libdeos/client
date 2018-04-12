@@ -387,13 +387,39 @@ func (t *ImplicitTeamsNameInfoSource) DecryptionKeys(ctx context.Context, name s
 
 func (t *ImplicitTeamsNameInfoSource) EphemeralEncryptionKey(ctx context.Context, tlfName string, tlfID chat1.TLFID,
 	membersType chat1.ConversationMembersType, public bool) (keybase1.TeamEk, error) {
-	panic("unimplemented")
+	// The native case is the same as regular teams.
+	if membersType == chat1.ConversationMembersType_IMPTEAMNATIVE {
+		teamID, err := keybase1.TeamIDFromString(tlfID.String())
+		if err != nil {
+			return keybase1.TeamEk{}, err
+		}
+		return t.G().GetEKLib().GetOrCreateLatestTeamEK(ctx, teamID)
+	}
+	// Otherwise for implicit teams, we have to load the team to get its ID.
+	team, err := t.loader.loadTeam(ctx, tlfID, tlfName, membersType, public, nil)
+	if err != nil {
+		return keybase1.TeamEk{}, err
+	}
+	return t.G().GetEKLib().GetOrCreateLatestTeamEK(ctx, team.ID)
 }
 
 func (t *ImplicitTeamsNameInfoSource) EphemeralDecryptionKey(ctx context.Context, tlfName string, tlfID chat1.TLFID,
 	membersType chat1.ConversationMembersType, public bool,
 	generation keybase1.EkGeneration) (keybase1.TeamEk, error) {
-	panic("unimplemented")
+	// The native case is the same as regular teams.
+	if membersType == chat1.ConversationMembersType_IMPTEAMNATIVE {
+		teamID, err := keybase1.TeamIDFromString(tlfID.String())
+		if err != nil {
+			return keybase1.TeamEk{}, err
+		}
+		return t.G().GetTeamEKBoxStorage().Get(ctx, teamID, generation)
+	}
+	// Otherwise for implicit teams, we have to load the team to get its ID.
+	team, err := t.loader.loadTeam(ctx, tlfID, tlfName, membersType, public, nil)
+	if err != nil {
+		return keybase1.TeamEk{}, err
+	}
+	return t.G().GetTeamEKBoxStorage().Get(ctx, team.ID, generation)
 }
 
 func (t *ImplicitTeamsNameInfoSource) lookupInternalName(ctx context.Context, name string, public bool) (res *types.NameInfo, err error) {
