@@ -186,13 +186,13 @@ func (k *KeyFinderImpl) FindForDecryption(ctx context.Context,
 }
 
 func (k *KeyFinderImpl) EphemeralKeyForEncryption(ctx context.Context, tlfName string, tlfID chat1.TLFID,
-	membersType chat1.ConversationMembersType, public bool) {
-	panic("unimplemented")
+	membersType chat1.ConversationMembersType, public bool) (ek keybase1.TeamEk, err error) {
+	return k.createNameInfoSource(ctx, membersType).EphemeralEncryptionKey(ctx, tlfName, tlfID, membersType, public)
 }
 
 func (k *KeyFinderImpl) EphemeralKeyForDecryption(ctx context.Context, tlfName string, tlfID chat1.TLFID,
-	membersType chat1.ConversationMembersType, public bool, generation keybase1.EkGeneration) {
-	panic("unimplemented")
+	membersType chat1.ConversationMembersType, public bool, generation keybase1.EkGeneration) (keybase1.TeamEk, error) {
+	return k.createNameInfoSource(ctx, membersType).EphemeralDecryptionKey(ctx, tlfName, tlfID, membersType, public, generation)
 }
 
 func (k *KeyFinderImpl) SetNameInfoSourceOverride(ni types.NameInfoSource) {
