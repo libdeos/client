@@ -239,13 +239,20 @@ func (t *TeamsNameInfoSource) DecryptionKeys(ctx context.Context, name string, t
 
 func (t *TeamsNameInfoSource) EphemeralEncryptionKey(ctx context.Context, tlfName string, tlfID chat1.TLFID,
 	membersType chat1.ConversationMembersType, public bool) (keybase1.TeamEk, error) {
-	panic("unimplemented")
+	teamID, err := keybase1.TeamIDFromString(tlfID.String())
+	if err != nil {
+		return keybase1.TeamEk{}, err
+	}
+	return t.G().GetEKLib().GetOrCreateLatestTeamEK(ctx, teamID)
 }
 
 func (t *TeamsNameInfoSource) EphemeralDecryptionKey(ctx context.Context, tlfName string, tlfID chat1.TLFID,
-	membersType chat1.ConversationMembersType, public bool,
-	generation keybase1.EkGeneration) (keybase1.TeamEk, error) {
-	panic("unimplemented")
+	membersType chat1.ConversationMembersType, public bool, generation keybase1.EkGeneration) (keybase1.TeamEk, error) {
+	teamID, err := keybase1.TeamIDFromString(tlfID.String())
+	if err != nil {
+		return keybase1.TeamEk{}, err
+	}
+	return t.G().GetTeamEKBoxStorage().Get(ctx, teamID, generation)
 }
 
 type ImplicitTeamsNameInfoSource struct {
