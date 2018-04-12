@@ -1446,6 +1446,16 @@ func (k *KeyFinderMock) FindForDecryption(ctx context.Context,
 	return k.Find(ctx, tlfName, membersType, public)
 }
 
+func (k *KeyFinderMock) EphemeralKeyForEncryption(ctx context.Context, tlfName string, tlfID chat1.TLFID,
+	membersType chat1.ConversationMembersType, public bool) {
+	panic("unimplemented")
+}
+
+func (k *KeyFinderMock) EphemeralKeyForDecryption(ctx context.Context, tlfName string, tlfID chat1.TLFID,
+	membersType chat1.ConversationMembersType, public bool, generation keybase1.EkGeneration) {
+	panic("unimplemented")
+}
+
 func (k *KeyFinderMock) SetNameInfoSourceOverride(ni types.NameInfoSource) {}
 
 func remarshalBoxed(t *testing.T, v chat1.MessageBoxed) *chat1.MessageBoxed {
