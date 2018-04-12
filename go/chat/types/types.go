@@ -13,7 +13,6 @@ var ActionSetStatus = "setStatus"
 var ActionSetAppNotificationSettings = "setAppNotificationSettings"
 var ActionTeamType = "teamType"
 var ActionExpunge = "expunge"
-var ActionEphemeralPurge = "ephemeralPurge"
 
 var PushActivity = "chat.activity"
 var PushTyping = "chat.typing"
