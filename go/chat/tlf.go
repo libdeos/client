@@ -102,13 +102,13 @@ func (t *KBFSNameInfoSource) DecryptionKeys(ctx context.Context, tlfName string,
 
 func (t *KBFSNameInfoSource) EphemeralEncryptionKey(ctx context.Context, tlfName string, tlfID chat1.TLFID,
 	membersType chat1.ConversationMembersType, public bool) (keybase1.TeamEk, error) {
-	panic("unimplemented")
+	return keybase1.TeamEk{}, fmt.Errorf("KBFSNameInfoSource doesn't support ephemeral keys")
 }
 
 func (t *KBFSNameInfoSource) EphemeralDecryptionKey(ctx context.Context, tlfName string, tlfID chat1.TLFID,
 	membersType chat1.ConversationMembersType, public bool,
 	generation keybase1.EkGeneration) (keybase1.TeamEk, error) {
-	panic("unimplemented")
+	return keybase1.TeamEk{}, fmt.Errorf("KBFSNameInfoSource doesn't support ephemeral keys")
 }
 
 func (t *KBFSNameInfoSource) CryptKeys(ctx context.Context, tlfName string) (res keybase1.GetTLFCryptKeysRes, ferr error) {
